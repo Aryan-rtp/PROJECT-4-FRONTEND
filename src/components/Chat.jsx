@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { io } from 'socket.io-client'
 import './Chat.css'
 
+// Update this with your actual backend URL
+const BACKEND_URL = 'https://project-4-backend-xe11.onrender.com'
+
 function Chat() {
   const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState('')
@@ -11,12 +14,19 @@ function Chat() {
 
   useEffect(() => {
     // Connect to the backend
-    socketRef.current = io('https://project-4-backend-xe11.onrender.com', {
+    socketRef.current = io(BACKEND_URL, {
       reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5,
     })
 
     socketRef.current.on('connect', () => {
-      console.log('Connected to server')
+      console.log('✅ Connected to server')
+    })
+
+    socketRef.current.on('connect_error', (error) => {
+      console.error('❌ Connection error:', error)
     })
 
     socketRef.current.on('ai-response', (data) => {
