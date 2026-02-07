@@ -11,7 +11,7 @@ function Chat() {
 
   useEffect(() => {
     // Connect to the backend
-    socketRef.current = io('http://localhost:3000', {
+    socketRef.current = io('https://project-4-backend-xe11.onrender.com', {
       reconnection: true,
     })
 
